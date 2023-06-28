@@ -1,0 +1,25 @@
+﻿@inject NavigationManager _navigationManager
+
+@page "/"
+
+
+
+<PageTitle>Index</PageTitle>
+
+<h1>Bear report and bear locations/information</h1>
+
+<div>Currently in Anchorage while bears are not a problem we should all be aware of them. Given what they can do, So we made this site as a way for the people of anchorage to stay safe outside. That can be anything from going on a hike to walking around a neighborhood a bear could be there and it is good to know it they are. So we encourage you to report bear here when you see them to keep your fellow citizens safe.
+</div>
+<button @onclick = "newReport">To submit a bear report click here</button><br>
+<button @onclick = "@locations">To see bear locations and information click here</button>
+
+@code{
+   private void newReport()
+    {
+        _navigationManager.NavigateTo("newReport");
+    }
+    private void locations()
+    {
+        _navigationManager.NavigateTo("locations");
+    }
+}

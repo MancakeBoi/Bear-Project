@@ -1,0 +1,14 @@
+@page "/thank_you"
+@inject NavigationManager _navigationManager
+
+<div>
+    <div>Thank you for Submiting a report. We hope you continue to use this service to keep us all safer out doors.</div>
+    <div>If you would like to get information on how to stay safe around bears <NavLink href = "https://www.nps.gov/subjects/bears/safety.htm">click here.</NavLink>.</div>
+    <button @onclick = "locations">For bear locations click here</button>
+</div>
+@code{
+    private void locations()
+    {
+        _navigationManager.NavigateTo("locations");
+    }
+}

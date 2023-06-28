@@ -1,0 +1,134 @@
+@page "/newReport"
+
+@using Microsoft.EntityFrameworkCore
+@using  bear_project_server.Data
+@using Microsoft.Extensions.Configuration
+@inject NavigationManager _navigationManager
+@inject IDbContextFactory<BearDemoContext> DbFactory
+@inject IConfiguration Configuration
+
+<h3 class = "title">Bear Report</h3>
+<div>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" 
+    rel="stylesheet" />
+        <label>what type of bear was it</label><br>
+            <select name = "type_bear" id = "type_bear" @bind = "vars1.Type">
+                <option value = "black bear">black bear</option>
+                <option value = "brown bear">brown bear</option>
+            </select><br>
+    
+        <label>what kind of encounter</label><br>
+            <select name="encounter" id="encounter" @bind = "vars1.Encounter">
+                <option value = "sighting">sighting</option>
+                <option value = "attack/aggressiveBear">attack/aggressive bear</option>
+                <option value = "garbage">bear got into garbage or was trying to</option>
+            </select><br>
+    
+        <label>what was the location</label><br>
+            <div @ref = "mapElement" style = "width:400px;height:300px"></div>
+            
+    
+        <label>how many adults were there</label><br>
+            <Counter 
+            @bind-Count = "@vars1.Adults">
+            </Counter><br>
+    
+        <label>how many cubs were there</label><br>
+            <Counter 
+            @bind-Count = "@vars1.Cubs">
+            </Counter><br>
+        
+        <button class = "submit" @onclick="submit_action" >Submit</button>
+                
+        
+</div>
+@inject IJSRuntime JS
+@code {
+    
+    //map varables 
+    private ElementReference mapElement;
+    private IJSObjectReference? mapModule1;
+    private IJSObjectReference? mapInstance1;
+    private DotNetObjectReference<Bear_Survey>? dotNetHelper;
+    private decimal? location;
+
+
+    public Report vars1 = new Report();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine(Configuration["MapBoxApiKey"]);
+            mapModule1 = await JS.InvokeAsync<IJSObjectReference>(
+                "import", "./mapComponent.js");
+            await mapModule1.InvokeVoidAsync("setToken" , Configuration["MapBoxApiKey"]);
+            mapInstance1 = await mapModule1.InvokeAsync<IJSObjectReference>(
+                "addMapToElement",mapElement);
+            
+
+            dotNetHelper = DotNetObjectReference.Create(this);
+            await mapModule1.InvokeVoidAsync("starter", 
+                dotNetHelper);
+            
+            
+            await mapModule1.InvokeVoidAsync("addPoint").AsTask();
+        }
+        if(mapModule1 is not null)
+        {
+
+        }
+   
+    }
+
+    
+    public void go()
+    {
+    //location = await mapModule1.InvokeAsync<decimal>("getlatlng").AsTask();
+   
+    }
+    
+   
+    [JSInvokable]
+    public void setLatLng(decimal Lat , decimal Lng)
+    {
+        
+        vars1.lat = Lat;
+        vars1.lng = Lng;
+        
+    }
+    public void submit_action()
+    {
+        //logger.LogWarning("report recived");
+        //Console.WriteLine("this is working");
+        //go to a new page
+        //validate
+        
+      
+        using var context = DbFactory.CreateDbContext();
+
+        // this just attaches
+        if (vars1 is not null)
+        {
+            context.Reports?.Add(vars1);
+            
+        }
+        try
+        {
+            context.SaveChanges();
+            
+            // ready for the next
+            vars1 = new();
+            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+        _navigationManager.NavigateTo("thank_you");
+
+
+        
+    }
+    //if check_submit
+
+}

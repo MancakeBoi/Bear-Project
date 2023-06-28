@@ -1,0 +1,250 @@
+
+
+@using bear_project_server.Data
+
+@inject IDbContextFactory<BearDemoContext> DbFactory;
+@using (var context = DbFactory.CreateDbContext())
+{
+ 
+       <table>
+            <tr>
+                <th>ID</th>
+                <th>Date and Time</th>
+                <th>Type of encounter</th>
+                <th>Location of encounter</th>
+                <th>Number of cubs</th>
+                <th>Number of adults</th>
+                <th>latitude</th>
+                <th>longitude</th>
+            </tr>
+            @foreach(var report in context.Reports.ToList())
+            {
+                if (Sort == "allTime")
+                {   
+  
+                    <tr>
+                        <td>@report.Id</td>
+                            <td>@report.TimeStamp</td>
+                            @if (report.Encounter == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Encounter != null)
+                            {
+                                <td>@report.Encounter</td>
+                            }       
+                            @if (report.Location == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Location != null)
+                            {
+                                <td>@report.Location</td>
+                            }    
+                            <td>@report.Cubs</td>
+                            <td>@report.Adults</td>
+                            @if (report.lat == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lat != null)
+                            {
+                                <td>@report.lat</td>
+                            }    
+                            @if (report.lng == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lng != null)
+                            {
+                                <td>@report.lng</td>
+                            }    
+                    </tr>
+                    
+                }
+                if (Sort == "year")
+                {   
+                    if (report.TimeStamp > DateTime.Now.AddYears( -1 ))
+                    {
+                        <tr>
+                            <td>@report.Id</td>
+                            <td>@report.TimeStamp</td>
+                            @if (report.Encounter == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Encounter != null)
+                            {
+                                <td>@report.Encounter</td>
+                            }       
+                            @if (report.Location == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Location != null)
+                            {
+                                <td>@report.Location</td>
+                            }    
+                            <td>@report.Cubs</td>
+                            <td>@report.Adults</td>
+                            @if (report.lat == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lat != null)
+                            {
+                                <td>@report.lat</td>
+                            }    
+                            @if (report.lng == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lng != null)
+                            {
+                                <td>@report.lng</td>
+                            }    
+                        </tr>
+                    }
+                }
+                if (Sort == "month")
+                {   
+                    if (report.TimeStamp > DateTime.Now.AddMonths( -1 ))
+                    {
+                        <tr>
+                            <td>@report.Id</td>
+                            <td>@report.TimeStamp</td>
+                            @if (report.Encounter == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Encounter != null)
+                            {
+                                <td>@report.Encounter</td>
+                            }       
+                            @if (report.Location == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Location != null)
+                            {
+                                <td>@report.Location</td>
+                            }    
+                            <td>@report.Cubs</td>
+                            <td>@report.Adults</td>
+                            @if (report.lat == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lat != null)
+                            {
+                                <td>@report.lat</td>
+                            }    
+                            @if (report.lng == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lng != null)
+                            {
+                                <td>@report.lng</td>
+                            }    
+                        </tr>
+                    }
+                }
+                if (Sort == "week")
+                {   
+                    if (report.TimeStamp > DateTime.Now.AddDays( -7 ))
+                    {
+                        <tr>
+                            <td>@report.Id</td>
+                            <td>@report.TimeStamp</td>
+                            @if (report.Encounter == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Encounter != null)
+                            {
+                                <td>@report.Encounter</td>
+                            }       
+                            @if (report.Location == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Location != null)
+                            {
+                                <td>@report.Location</td>
+                            }    
+                            <td>@report.Cubs</td>
+                            <td>@report.Adults</td>
+                            @if (report.lat == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lat != null)
+                            {
+                                <td>@report.lat</td>
+                            }    
+                            @if (report.lng == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lng != null)
+                            {
+                                <td>@report.lng</td>
+                            }    
+                        </tr>
+                    }
+                }
+                if (Sort == "day")
+                {   
+                    if (report.TimeStamp > DateTime.Now.AddDays( -1 ))
+                    {
+                        <tr>
+                            <td>@report.Id</td>
+                            <td>@report.TimeStamp</td>
+                            @if (report.Encounter == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Encounter != null)
+                            {
+                                <td>@report.Encounter</td>
+                            }       
+                            @if (report.Location == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.Location != null)
+                            {
+                                <td>@report.Location</td>
+                            }    
+                            <td>@report.Cubs</td>
+                            <td>@report.Adults</td>
+                            @if (report.lat == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lat != null)
+                            {
+                                <td>@report.lat</td>
+                            }    
+                            @if (report.lng == null)
+                                {
+                                <td class = "null">null</td>
+                                }
+                            @if (report.lng != null)
+                            {
+                                <td>@report.lng</td>
+                            }    
+                        </tr>
+                    }
+                }
+                
+            }
+       </table>
+    
+}
+@code{
+    [Parameter]
+    public string? Sort {get; set;}
+ 
+}

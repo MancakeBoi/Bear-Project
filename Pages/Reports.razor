@@ -1,0 +1,142 @@
+@page "/locations"
+
+@inject IDbContextFactory<BearDemoContext> DbFactory;
+@inject IJSRuntime JS
+@inject NavigationManager _navigationManager
+@using Microsoft.EntityFrameworkCore
+@using bear_project_server.Data
+@inject IConfiguration Configuration
+
+<label>Filter reports</label>
+<button @onclick = "allFilter">All time</button>
+<button @onclick = "yearFilter">In the last year</button>
+<button @onclick = "monthFilter">In the last month</button>
+<button @onclick = "weekFilter">In the last week</button>
+<button @onclick = "dayFilter">Since yesterday</button>
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" 
+    rel="stylesheet" />
+<div @ref = "mapElement" style = "width:400px;height:300px"></div>
+
+<ReportTable
+Sort = "@filter">
+</ReportTable>
+
+
+@code{
+    private ElementReference mapElement;
+    private IJSObjectReference? mapModule1;
+    private IJSObjectReference? mapInstance1;
+    public string? filter = "allTime";
+    
+    //public BearDemoContext? context = DbFactory.CreateDbContext();
+    
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        
+        if (firstRender)
+        {
+            
+            mapModule1 = await JS.InvokeAsync<IJSObjectReference>(
+                "import", "./BearMap.js");
+             await mapModule1.InvokeVoidAsync("setToken" , Configuration["MapBoxApiKey"]);
+
+            mapInstance1 = await mapModule1.InvokeAsync<IJSObjectReference>(
+                "addMap",mapElement);
+             await makeMarkers();
+            
+            
+            
+                
+                
+            
+            
+        }
+    }
+    public async Task makeMarkers()
+    {
+        using var context = DbFactory.CreateDbContext();
+        foreach(var report in context.Reports.ToList()) 
+            {
+                if (filter == "allTime")
+                {
+                    if (report.lng != null && report.lat != null)
+                    {
+                        await mapModule1.InvokeVoidAsync("addBear" , report.lng , report.lat , report.Type, report.Encounter,report.Adults,report.Cubs,report.TimeStamp);
+                    }
+                }
+                if (filter == "year")
+                {
+                    if (report.lng != null && report.lat != null && report.TimeStamp > DateTime.Now.AddYears( -1 ))
+                    {
+                        await mapModule1.InvokeVoidAsync("addBear" , report.lng , report.lat , report.Type, report.Encounter,report.Adults,report.Cubs,report.TimeStamp);
+                    }
+                }
+                if (filter == "month")
+                {
+                    if (report.lng != null && report.lat != null && report.TimeStamp > DateTime.Now.AddMonths( -1 ))
+                    {
+                        await mapModule1.InvokeVoidAsync("addBear" , report.lng , report.lat , report.Type, report.Encounter,report.Adults,report.Cubs,report.TimeStamp);
+                    }
+                }
+                if (filter == "week")
+                {
+                    if (report.lng != null && report.lat != null && report.TimeStamp > DateTime.Now.AddDays( -7 ))
+                    {
+                        await mapModule1.InvokeVoidAsync("addBear" , report.lng , report.lat , report.Type, report.Encounter,report.Adults,report.Cubs,report.TimeStamp);
+                    }
+                }
+                if (filter == "day")
+                {
+                    if (report.lng != null && report.lat != null && report.TimeStamp > DateTime.Now.AddDays( -1 ))
+                    {
+                        await mapModule1.InvokeVoidAsync("addBear" , report.lng , report.lat , report.Type, report.Encounter,report.Adults,report.Cubs,report.TimeStamp);
+                    }
+                }
+            }
+        
+    }
+    public async Task RemoveMakers()
+    {
+        await mapModule1.InvokeVoidAsync("removeMarkers");
+    }
+    private async Task allFilter()
+    {
+        _navigationManager.NavigateTo("locations");
+        filter = "allTime";
+        await RemoveMakers();
+        await makeMarkers();
+
+    }
+    private async Task yearFilter()
+    {
+        _navigationManager.NavigateTo("locations");
+        filter = "year";
+        await RemoveMakers();
+        await makeMarkers();
+    }
+    private async Task monthFilter()
+    {
+        _navigationManager.NavigateTo("locations");
+        filter = "month";
+        await RemoveMakers();
+        await makeMarkers();
+    }
+    private async Task weekFilter()
+    {
+        _navigationManager.NavigateTo("locations");
+        filter = "week";
+        await RemoveMakers();
+        await makeMarkers();
+    }
+    private async Task dayFilter()
+    {
+        _navigationManager.NavigateTo("locations");
+        filter = "day";
+        await RemoveMakers();
+        await makeMarkers();
+    }
+
+
+}

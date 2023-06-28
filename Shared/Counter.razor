@@ -1,0 +1,19 @@
+
+ <a><button @onclick = "Decrease">−</button>@Count<button @onclick = "Increase">+</button></a>
+@code{
+    [Parameter]
+    public int? Count {get; set;}
+    [Parameter]
+    public EventCallback<int?> CountChanged { get; set; }
+    public void Increase()
+    {
+ 
+        CountChanged.InvokeAsync(++Count);
+    }
+    public void Decrease()
+    {
+        CountChanged.InvokeAsync(--Count);
+        
+    }
+    
+}
