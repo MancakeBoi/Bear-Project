@@ -5,8 +5,8 @@
 @inject IDbContextFactory<BearDemoContext> DbFactory;
 @using (var context = DbFactory.CreateDbContext())
 {
- 
-       <table>
+
+        <table>
             <tr>
                 <th>ID</th>
                 <th>Date and Time</th>
@@ -21,7 +21,6 @@
             {
                 if (Sort == "allTime")
                 {   
-  
                     <tr>
                         <td>@report.Id</td>
                             <td>@report.TimeStamp</td>
@@ -246,5 +245,8 @@
 @code{
     [Parameter]
     public string? Sort {get; set;}
- 
+    public void refesh()
+    {
+        this.StateHasChanged();
+    }
 }

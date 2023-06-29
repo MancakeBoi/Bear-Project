@@ -8,11 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddDbContextFactory<BearDemoContext>();
+builder.Services.AddDbContextFactory<BearDemoContext>(opt =>
+    opt.UseSqlite($"Data Source=Bears.db"));
 
 builder.Configuration.AddJsonFile(@"C:\Secrets\AppSecrets.json");
 
 var app = builder.Build();
+
 
 
 //await using var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateAsyncScope();

@@ -58,7 +58,7 @@
     {
         if (firstRender)
         {
-            Console.WriteLine(Configuration["MapBoxApiKey"]);
+            
             mapModule1 = await JS.InvokeAsync<IJSObjectReference>(
                 "import", "./mapComponent.js");
             await mapModule1.InvokeVoidAsync("setToken" , Configuration["MapBoxApiKey"]);

@@ -1,9 +1,10 @@
 @page "/challenges"
+@inject NavigationManager _navigationManager
 <h2>Challenges</h2>
 <dl>
     <dt>DataBase</dt>
     <dd>- The amount of time and research it took</dd>
-    <button>where it was used</button>
+    <button @onclick = "show">where it was used</button>
     <dt>Using Java Script</dt>
     <dd>- When using it we had to use different methods then we were used to</dd>
     <dt>How novice i actually was</dt>
@@ -11,3 +12,9 @@
     <dt>using new languages</dt>
     <dd>- Everything i did was with a new language so that came with unique challenges</dd>
 </dl>
+@code{
+    private void show()
+    {
+        _navigationManager.NavigateTo("newReport");
+    }
+}

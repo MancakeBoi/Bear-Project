@@ -13,13 +13,12 @@ public partial class BearDemoContext : DbContext
     public BearDemoContext(DbContextOptions<BearDemoContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
     public virtual DbSet<Report>? Reports { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=MOASDBDEV50\\SMALLAPPS;Database=BearDemo;Integrated Security=True;Encrypt = False ");
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,7 +32,7 @@ public partial class BearDemoContext : DbContext
                 .HasMaxLength(30)
                 .IsFixedLength();
             entity.Property(e => e.TimeStamp)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("Date('now')")
                 .HasColumnName("TImeStamp");
             entity.Property(e => e.Type)
                 .HasMaxLength(40)
